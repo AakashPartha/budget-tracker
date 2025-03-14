@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTrash } from "react-icons/fa";
+import Chart from "./Chart"; // Import the chart component
 
 export default function App() {
   const [transactions, setTransactions] = useState(() => {
@@ -104,6 +105,9 @@ export default function App() {
             </motion.li>
           ))}
         </motion.ul>
+
+        {/* Add the Chart Below Transactions */}
+        <Chart transactions={transactions} />
       </div>
     </div>
   );
