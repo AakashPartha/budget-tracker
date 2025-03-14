@@ -31,12 +31,24 @@ export default function App() {
     setTransactions(transactions.filter((t) => t.id !== id));
   };
 
+  // Calculate total balance
+  const totalBalance = transactions.reduce((acc, t) => acc + t.amount, 0);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-4">
           💰 Budget Tracker
         </h1>
+
+        {/* Total Balance Display */}
+        <div
+          className={`text-center text-2xl font-bold p-3 rounded ${
+            totalBalance >= 0 ? "text-green-400" : "text-red-400"
+          }`}
+        >
+          Balance: ${totalBalance.toFixed(2)}
+        </div>
 
         <div className="mb-4">
           <input
