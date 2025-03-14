@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTrash } from "react-icons/fa";
-import Chart from "./Chart"; // Import the chart component
+import Chart from "./Chart";
+import PieChartComponent from "./PieChart"; // Import Pie Chart component
 
 export default function App() {
+  const categories = ["Food", "Rent", "Entertainment", "Transportation", "Other"];
+
   const [transactions, setTransactions] = useState(() => {
     return JSON.parse(localStorage.getItem("transactions")) || [];
   });
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState(categories[0]);
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -21,11 +25,13 @@ export default function App() {
       id: Date.now(),
       description,
       amount: parseFloat(amount),
+      category,
     };
 
     setTransactions([...transactions, newTransaction]);
     setDescription("");
     setAmount("");
+    setCategory(categories[0]);
   };
 
   const deleteTransaction = (id) => {
@@ -71,6 +77,20 @@ export default function App() {
           />
         </div>
 
+        <div className="mb-4">
+          <select
+            className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none text-white"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button
           onClick={addTransaction}
           className="w-full p-3 bg-green-500 rounded hover:bg-green-600 transition duration-200"
@@ -92,7 +112,7 @@ export default function App() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <span>{t.description}</span>
+              <span>{t.description} ({t.category})</span>
               <span className={t.amount >= 0 ? "text-green-400" : "text-red-400"}>
                 ${t.amount.toFixed(2)}
               </span>
@@ -106,8 +126,11 @@ export default function App() {
           ))}
         </motion.ul>
 
-        {/* Add the Chart Below Transactions */}
+        {/* Add the Income vs. Expenses Chart */}
         <Chart transactions={transactions} />
+
+        {/* Add the Pie Chart */}
+        <PieChartComponent transactions={transactions} />
       </div>
     </div>
   );
