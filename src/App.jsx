@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { FaTrash } from "react-icons/fa";
 
 export default function App() {
   const [transactions, setTransactions] = useState(() => {
@@ -24,6 +25,10 @@ export default function App() {
     setTransactions([...transactions, newTransaction]);
     setDescription("");
     setAmount("");
+  };
+
+  const deleteTransaction = (id) => {
+    setTransactions(transactions.filter((t) => t.id !== id));
   };
 
   return (
@@ -78,6 +83,12 @@ export default function App() {
               <span className={t.amount >= 0 ? "text-green-400" : "text-red-400"}>
                 ${t.amount.toFixed(2)}
               </span>
+              <button
+                onClick={() => deleteTransaction(t.id)}
+                className="text-red-400 hover:text-red-600 transition duration-200 ml-3"
+              >
+                <FaTrash />
+              </button>
             </motion.li>
           ))}
         </motion.ul>
